@@ -1,7 +1,9 @@
+using ApplicationCore.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -15,16 +17,24 @@ namespace UserManagementSystem
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
         public IConfiguration Configuration { get; }
+        public string BaseApiUrl { get; set; }
+        public IWebHostEnvironment Environment { get; }
+
+        public Startup(IConfiguration configuration,
+                       IWebHostEnvironment environment)
+        {
+            Environment = environment;
+            Configuration = configuration;
+            BaseApiUrl = Environment.IsDevelopment() ? Configuration.GetSection("Enviroment").GetSection("DevIdentity").Value : Configuration.GetSection("Enviroment").GetSection("ProdIdentity").Value;
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<DBContext>(options =>
+                                             options.UseSqlServer(Configuration.GetConnectionString("ConnectionString")));
+
             services.AddControllers();
         }
 
