@@ -1,23 +1,17 @@
 using ApplicationCore.Entities;
-using ApplicationCore.Helpers;
 using ApplicationCore.Interfaces;
+using ApplicationCore.Interfaces.Permission;
+using ApplicationCore.Interfaces.UserPermission;
 using ApplicationCore.Services;
-using AutoMapper;
+using ApplicationCore.Services.UserPermission;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
+
 
 namespace UserManagementSystem
 {
@@ -44,6 +38,16 @@ namespace UserManagementSystem
             #region UserService
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
+            #endregion
+
+            #region Permission
+            services.AddScoped<IPermissionRepository, PermissionRepository>();
+            services.AddScoped<IPermissionService, PermissionService>();
+            #endregion
+
+            #region UserPermission
+            services.AddScoped<IUserPermissionRepository, UserPermissionRepository>();
+            services.AddScoped<IUserPermissionService, UserPermissionService>();
             #endregion
 
             services.AddControllers();

@@ -60,35 +60,68 @@
             <a>Status</a>
             <i class="fas fa-sort-alpha-up"></i>
         </th>
+        <th onclick="SortByColumn('CreatedOn', '@Model.PaginationQueryDto.OrderBy', @Model.PaginationDto.Page)">
+            <a>Created on</a>
+            <i class="fas fa-sort-alpha-up"></i>
+        </th>
+        <th onclick="SortByColumn('ModifiedOn', '@Model.PaginationQueryDto.OrderBy', @Model.PaginationDto.Page)">
+            <a>Modified on</a>
+            <i class="fas fa-sort-alpha-up"></i>
+        </th>
+        <th>
+            <a>Edit user</a>
+        </th>
         <th>
             <a>Delete user</a>
+        </th>
+        <th>
+            <a>Assign permissions</a>
         </th>
     </tr>
     @foreach (var user in Model.PaginationDto.ModelList)
     {
-        <tr>
-            <td>
-                @user.FirstName
-            </td>
-            <td>
-                @user.LastName
-            </td>
-            <td>
-                @user.Username
-            </td>
-            <td>
-                @user.Password
-            </td>
-            <td>
-                @user.Email
-            </td>
-            <td>
-                @user.Status
-            </td>
-            <td>
-                <a onclick="DeleteUser('@user.Id')" title="Delete user @user.FirstName @user.LastName"><i class="fas fa-trash-alt"></i></a>
-            </td>
-        </tr>
+    <tr>
+        <td>
+            @user.FirstName
+        </td>
+        <td>
+            @user.LastName
+        </td>
+        <td>
+            @user.Username
+        </td>
+        <td>
+            @user.Password
+        </td>
+        <td>
+            @user.Email
+        </td>
+        <td>
+            @user.Status
+        </td>
+        <td>
+            @user.CreatedOn
+        </td>
+        <td>
+            @if (user.ModifiedOn != null)
+            {
+                @user.ModifiedOn
+            }
+            else
+            {
+                <p>-</p>
+            }
+        </td>
+        <td>
+            <a onclick="EditUser('@user.Id')" title="Edit user @user.FirstName @user.LastName"><i class="fas fa-user-edit"></i></a>
+        </td>
+        <td>
+            <a onclick="DeleteUser('@user.Id')" title="Delete user @user.FirstName @user.LastName"><i class="fas fa-trash-alt"></i></a>
+        </td>
+        <td>
+            <a onclick="AssignPermission('@user.Id')" title="Assign permission to @user.FirstName @user.LastName"><i class="fas fa-plus-circle"></i></a>
+        </td>
+    </tr>
     }
 </table>
 <div class="pagination d-flex mt-2">
@@ -100,7 +133,7 @@
 
     <a> Page @(Model.PaginationDto.Page + 1) from @Model.PaginationDto.Pages </a>
 
-    @if (Model.PaginationDto.Page+1 < Model.PaginationDto.Pages)
+    @if (Model.PaginationDto.Page + 1 < Model.PaginationDto.Pages)
     {
         int nextPage = Model.PaginationDto.Page + 1;
         <a onclick="Search('@Model.PaginationQueryDto.SortBy','@Model.PaginationQueryDto.OrderBy', @nextPage)" class="pl-2"><i class="fas fa-angle-double-right"></i></a>

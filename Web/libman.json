@@ -10,6 +10,10 @@
       "provider": "jsdelivr",
       "library": "sweetalert2@11.4.0",
       "destination": "wwwroot/lib/sweetalert2/"
+    },
+    {
+      "library": "select2@4.0.13",
+      "destination": "wwwroot/lib/select2/"
     }
   ]
 }

@@ -1,0 +1,64 @@
+﻿@page
+@model Web.Pages.Permission.AssignPermissionModel
+@{
+}
+
+<div class="card card-custom">
+    <div class="card-header">
+        <div class="card-toolbar row">
+            <h3 class="col-lg-11 card-title">Assign permission</h3>
+            <a class="col-lg-1" href="../" title=Back><i class="fas fa-arrow-left ml-6" style="color:black;"></i></a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row justify-content-center py-3 px-8 py-lg-12 px-lg-10">
+            <div class="col-xl-12 col-xxl-12">
+                <form class="form" id="formAssignPermission" method="post">
+                    @Html.HiddenFor(m => m.UserModel.Id, new { id = "UserId" })
+                    @Html.HiddenFor(m => m.UserModel.Id, new { id = "UserId" })
+                    @Html.HiddenFor(m => m.UserModel.Username, new { @class = "form-control" })
+                    @Html.HiddenFor(m => m.UserModel.Password, new { @class = "form-control" })
+                    @Html.HiddenFor(m => m.UserModel.Email, new { @class = "form-control" })
+                    @Html.HiddenFor(m => m.UserModel.Status, new { @class = "form-control" })
+
+                    @Html.ValidationSummary()
+                    <div class="pb-5">
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label text-lg-right">First name: <span class="text-danger">*</span></label>
+                            <div class="col-lg-3">
+                                @Html.TextBoxFor(m => m.UserModel.FirstName, "", new { @class = "form-control", @readonly = "true" })
+                            </div>
+                            <label class="col-lg-2 col-form-label text-lg-right">Last name: <span class="text-danger">*</span></label>
+                            <div class="col-lg-3">
+                                @Html.TextBoxFor(m => m.UserModel.LastName, "", new { @class = "form-control", @readonly = "true" })
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label text-lg-right">Asign permissions: <span class="text-danger">*</span></label>
+                            <div class="col-lg-10">
+                                @Html.ListBoxFor(m => m.PermissionsId, new SelectList(Model.PermissionList, "Id", "Description"), new { @class = "form-control form-control-solid form-control-lg", @id = "permissionSelect2", style = "width:100%;" })
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between border-top mt-5 pt-10">
+                            <div>
+                                <button asp-page-handler="Assign" type="submit" id="savebtn" class="btn btn-primary font-weight-bold">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $("#permissionSelect2").select2({
+            allowClear: true,
+            placeholder: 'Select permissions',
+            multiple: true,
+            closeOnSelect: false
+        });
+    </script>
+}
+
