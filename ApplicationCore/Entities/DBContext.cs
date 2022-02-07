@@ -1,19 +1,22 @@
-﻿using ApplicationCore.Entities;
+﻿using System;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace ApplicationCore.Models
+// Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
+// If you have enabled NRTs for your project, then un-comment the following line:
+// #nullable disable
+
+namespace ApplicationCore.Entities
 {
     public partial class DBContext : DbContext
     {
-        public IConfiguration Configuration { get; }
-
-        public DBContext(DbContextOptions<DBContext> options, IConfiguration configuration): base(options)
+        public DBContext()
         {
-            Configuration = configuration;
+        }
+
+        public DBContext(DbContextOptions<DBContext> options)
+            : base(options)
+        {
         }
 
         public virtual DbSet<Permission> Permission { get; set; }
@@ -59,9 +62,7 @@ namespace ApplicationCore.Models
                     .IsRequired()
                     .HasMaxLength(100);
 
-                entity.Property(e => e.Password)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.Property(e => e.Password).IsRequired();
 
                 entity.Property(e => e.Username)
                     .IsRequired()

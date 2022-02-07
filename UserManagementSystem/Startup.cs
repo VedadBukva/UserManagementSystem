@@ -1,4 +1,9 @@
-using ApplicationCore.Models;
+using ApplicationCore.Entities;
+using ApplicationCore.Helpers;
+using ApplicationCore.Interfaces;
+using ApplicationCore.Services;
+using AutoMapper;
+using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,12 +16,14 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace UserManagementSystem
 {
     public class Startup
     {
+        const string CORS_POLICY = "CorsPolicy";
         public IConfiguration Configuration { get; }
         public string BaseApiUrl { get; set; }
         public IWebHostEnvironment Environment { get; }
@@ -29,26 +36,45 @@ namespace UserManagementSystem
             BaseApiUrl = Environment.IsDevelopment() ? Configuration.GetSection("Enviroment").GetSection("DevIdentity").Value : Configuration.GetSection("Enviroment").GetSection("ProdIdentity").Value;
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DBContext>(options =>
                                              options.UseSqlServer(Configuration.GetConnectionString("ConnectionString")));
 
+            #region UserService
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserService, UserService>();
+            #endregion
+
             services.AddControllers();
+            services.AddSwaggerGen();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: CORS_POLICY,
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("*");
+                                      builder.AllowAnyMethod();
+                                      builder.AllowAnyHeader();
+                                  });
+            });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
+                app.UseSwagger();
+                app.UseSwaggerUI();
                 app.UseDeveloperExceptionPage();
             }
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            
+            app.UseCors(CORS_POLICY);
 
             app.UseAuthorization();
 
