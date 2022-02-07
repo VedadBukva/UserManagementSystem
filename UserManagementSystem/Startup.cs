@@ -13,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 
-namespace UserManagementSystem
+namespace WebAPI
 {
     public class Startup
     {
